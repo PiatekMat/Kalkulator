@@ -1,21 +1,15 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace Kalkkulator
 {
-    public partial class MainWindow : Window{
+    /// <summary>
+    /// Główne okno kalkulatora.
+    /// </summary>
+    public partial class MainWindow : Window
+    {
         private Stack<double> stack;
         double operand2 = 0;
         double operand1 = 0;
@@ -24,38 +18,53 @@ namespace Kalkkulator
         bool operand = false;
         bool both = false;
 
+        /// <summary>
+        /// Konstruktor klasy MainWindow.
+        /// </summary>
         public MainWindow()
         {
             InitializeComponent();
             stack = new Stack<double>();
         }
+
+        /// <summary>
+        /// Obsługuje kliknięcie przycisku cyfry.
+        /// </summary>
+        /// <param name="sender">Obiekt wywołujący zdarzenie.</param>
+        /// <param name="e">Argumenty zdarzenia.</param>
         private void numberButton_Click(object sender, RoutedEventArgs e)
         {
             Button button = sender as Button;
             Display.Text += button.Content.ToString();
         }
 
+        /// <summary>
+        /// Obsługuje kliknięcie przycisku operacji arytmetycznej.
+        /// </summary>
+        /// <param name="sender">Obiekt wywołujący zdarzenie.</param>
+        /// <param name="e">Argumenty zdarzenia.</param>
         private void Button_Click(object sender, RoutedEventArgs e)
         {
             Button button = sender as Button;
             buttonText = button.Content.ToString();
             double result = 0;
-            
 
-            if (!operand){
+            if (!operand)
+            {
                 stack.Push(double.Parse(Display.Text));
                 operand = true;
-            }else{
+            }
+            else
+            {
                 stack.Push(Double.Parse(Display.Text));
                 both = true;
             }
 
-            if (buttonText == "+" || buttonText == "-" || buttonText == "*" || buttonText == "/"){
+            if (buttonText == "+" || buttonText == "-" || buttonText == "*" || buttonText == "/")
+            {
                 operation = buttonText;
                 Display.Text = "";
-
             }
-
 
             if (buttonText == "Enter")
             {
@@ -67,20 +76,30 @@ namespace Kalkkulator
 
                 Display.Text = result.ToString();
                 both = false;
-                }
             }
+        }
 
+        /// <summary>
+        /// Obsługuje kliknięcie przycisku "Clear".
+        /// </summary>
+        /// <param name="sender">Obiekt wywołujący zdarzenie.</param>
+        /// <param name="e">Argumenty zdarzenia.</param>
         private void clearButton_Click(object sender, EventArgs e)
         {
             Display.Text = "";
             operand1 = 0;
             operand2 = 0;
             stack.Clear();
-            both= false;
+            both = false;
             operand = false;
         }
 
-        double Operations(string operation)
+        /// <summary>
+        /// Wykonuje operację arytmetyczną na dwóch operandach.
+        /// </summary>
+        /// <param name="operation">Operator arytmetyczny.</param>
+        /// <returns>Wynik operacji.</returns>
+        private double Operations(string operation)
         {
             switch (operation)
             {
@@ -96,13 +115,13 @@ namespace Kalkkulator
                         {
                             MessageBox.Show("Nie można dzielić przez 0");
                             return 0;
-                        }else 
+                        }
+                        else
                             return operand1 / operand2;
                     }
-                    
-                default: return 0;
+                default:
+                    return 0;
             }
         }
     }
 }
-
